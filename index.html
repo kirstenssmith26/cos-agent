@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chief of Staff · Kirsten Smith Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap');
+
+  :root {
+    --forest: #2C4A2E;
+    --forest-light: #3a5f3c;
+    --violet: #5B3A6B;
+    --violet-light: #7a5490;
+    --mist: #6B8FA8;
+    --mist-light: #8aafc8;
+    --cream: #F5F1EA;
+    --parchment: #EDE8DF;
+    --ink: #1C1C1C;
+    --smoke: #6B6B6B;
+    --border: rgba(44,74,46,0.15);
+    --shadow: 0 2px 20px rgba(44,74,46,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--forest);
+    color: var(--cream);
+    padding: 20px 32px 16px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 3px solid var(--violet);
+  }
+
+  .header-left h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.9rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+  }
+
+  .header-left p {
+    font-size: 0.72rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,241,234,0.6);
+    margin-top: 4px;
+  }
+
+  .status-badge {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--forest);
+    background: var(--cream);
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  /* MEMORY PANEL */
+  .memory-bar {
+    background: var(--forest);
+    border-bottom: 1px solid rgba(245,241,234,0.1);
+    padding: 8px 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.68rem;
+    color: rgba(245,241,234,0.55);
+    letter-spacing: 0.06em;
+  }
+
+  .memory-bar span { font-weight: 500; color: rgba(245,241,234,0.8); }
+
+  .memory-actions { margin-left: auto; display: flex; gap: 8px; }
+
+  .mem-btn {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 3px;
+    border: 1px solid rgba(245,241,234,0.2);
+    background: transparent;
+    color: rgba(245,241,234,0.6);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .mem-btn:hover { background: rgba(245,241,234,0.1); color: var(--cream); }
+  .mem-btn.danger:hover { background: rgba(180,60,60,0.4); border-color: rgba(180,60,60,0.6); color: var(--cream); }
+
+  /* NOTES PANEL */
+  .notes-panel {
+    background: #fffdf7;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--violet);
+    margin: 16px 0 0;
+    padding: 14px 18px;
+    border-radius: 2px;
+    display: none;
+  }
+  .notes-panel.open { display: block; }
+  .notes-panel h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--violet);
+    margin-bottom: 10px;
+  }
+  .notes-panel textarea {
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 10px 12px;
+    color: var(--ink);
+    background: white;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+  }
+  .notes-panel textarea:focus { border-color: var(--violet); }
+  .notes-save {
+    margin-top: 8px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    background: var(--violet);
+    color: var(--cream);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .notes-save:hover { background: var(--violet-light); }
+  .save-confirm { font-size: 0.7rem; color: var(--forest); margin-left: 10px; opacity: 0; transition: opacity 0.3s; }
+  .save-confirm.show { opacity: 1; }
+
+  /* QUICK ACTIONS */
+  .quick-actions {
+    background: var(--parchment);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 32px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .quick-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: white;
+    color: var(--forest);
+    border-color: var(--border);
+  }
+
+  .quick-btn:hover {
+    background: var(--forest);
+    color: var(--cream);
+    border-color: var(--forest);
+  }
+
+  .quick-btn.violet {
+    color: var(--violet);
+    border-color: rgba(91,58,107,0.2);
+  }
+  .quick-btn.violet:hover {
+    background: var(--violet);
+    color: var(--cream);
+    border-color: var(--violet);
+  }
+
+  .quick-btn.mist {
+    color: var(--mist);
+    border-color: rgba(107,143,168,0.25);
+  }
+  .quick-btn.mist:hover {
+    background: var(--mist);
+    color: var(--cream);
+    border-color: var(--mist);
+  }
+
+  /* MAIN LAYOUT */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 860px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 28px 24px 0;
+    gap: 0;
+  }
+
+  /* CONVERSATION */
+  #conversation {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 300px;
+    padding-bottom: 20px;
+  }
+
+  .msg {
+    display: flex;
+    gap: 12px;
+    animation: fadeUp 0.25s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg.user { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .avatar.cos {
+    background: var(--forest);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+
+  .avatar.user-av {
+    background: var(--violet);
+    color: var(--cream);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+
+  .bubble {
+    max-width: 82%;
+    padding: 14px 18px;
+    border-radius: 2px;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+
+  .msg.cos .bubble {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--forest);
+    box-shadow: var(--shadow);
+  }
+
+  .msg.user .bubble {
+    background: var(--violet);
+    color: var(--cream);
+    border-left: none;
+  }
+
+  .bubble strong { font-weight: 600; }
+  .bubble em { font-style: italic; color: var(--smoke); }
+
+  .bubble .section-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--forest);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .bubble ul {
+    margin: 8px 0 8px 16px;
+  }
+
+  .bubble li {
+    margin-bottom: 5px;
+  }
+
+  .bubble .tier-tag {
+    display: inline-block;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-right: 6px;
+  }
+
+  .tier-tag.t1 { background: rgba(44,74,46,0.1); color: var(--forest); }
+  .tier-tag.t2 { background: rgba(91,58,107,0.1); color: var(--violet); }
+  .tier-tag.t3 { background: rgba(107,143,168,0.12); color: var(--mist); }
+
+  /* THINKING */
+  .thinking {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 18px;
+    font-size: 0.8rem;
+    color: var(--smoke);
+    font-style: italic;
+  }
+
+  .dots span {
+    display: inline-block;
+    width: 5px; height: 5px;
+    background: var(--forest);
+    border-radius: 50%;
+    animation: blink 1.2s infinite;
+    opacity: 0.4;
+  }
+  .dots span:nth-child(2) { animation-delay: 0.2s; }
+  .dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes blink {
+    0%, 80%, 100% { opacity: 0.2; transform: scale(0.9); }
+    40% { opacity: 1; transform: scale(1.1); }
+  }
+
+  /* INPUT */
+  .input-area {
+    position: sticky;
+    bottom: 0;
+    background: var(--cream);
+    border-top: 1px solid var(--border);
+    padding: 16px 0 20px;
+    margin-top: auto;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  #user-input {
+    flex: 1;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: white;
+    color: var(--ink);
+    resize: none;
+    min-height: 48px;
+    max-height: 140px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  #user-input:focus {
+    border-color: var(--forest);
+  }
+
+  #user-input::placeholder {
+    color: #aaa;
+  }
+
+  #send-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    background: var(--forest);
+    color: var(--cream);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    height: 48px;
+  }
+
+  #send-btn:hover { background: var(--forest-light); }
+  #send-btn:disabled { background: #aaa; cursor: default; }
+
+  .input-hint {
+    font-size: 0.67rem;
+    color: #aaa;
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ERROR */
+  .error-bubble {
+    background: #fff0f0;
+    border: 1px solid #f5c6c6;
+    border-left: 3px solid #c0392b;
+    padding: 12px 16px;
+    font-size: 0.82rem;
+    color: #922;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Chief of Staff</h1>
+    <p>Kirsten Smith · Venture Portfolio · AI Staff</p>
+  </div>
+  <span class="status-badge">● Active</span>
+</header>
+
+<div class="memory-bar">
+  MEMORY <span id="mem-status">Loading…</span>
+  <div class="memory-actions">
+    <button class="mem-btn" onclick="toggleNotes()">📝 Notes</button>
+    <button class="mem-btn" onclick="clearHistory()">Clear History</button>
+    <button class="mem-btn danger" onclick="clearAll()">Reset All</button>
+  </div>
+</div>
+
+<div class="quick-actions">
+  <button class="quick-btn" onclick="sendQuick('Give me a portfolio status brief — what are the Tier 1 priorities right now and where do things stand?')">Portfolio Brief</button>
+  <button class="quick-btn violet" onclick="sendQuick('What should I focus on this week given my current bandwidth and the 2026 foundation-building goals?')">Weekly Focus</button>
+  <button class="quick-btn mist" onclick="sendQuick('Remind me of the key milestones and decision points coming up between now and the XMNR start in January 2027.')">Milestones</button>
+  <button class="quick-btn" onclick="sendQuick('What are the connections between my ventures — how do they feed each other?')">How It Connects</button>
+  <button class="quick-btn violet" onclick="sendQuick('What are the biggest risks or gaps in my current portfolio strategy?')">Risks & Gaps</button>
+  <button class="quick-btn mist" onclick="sendQuick('Give me a briefing on Wayfinder — current state, team, and next steps.')">Wayfinder Brief</button>
+</div>
+
+<main>
+  <div id="conversation">
+    <div class="msg cos">
+      <div class="avatar cos">C</div>
+      <div class="bubble">
+        <span class="section-label">Chief of Staff · Ready</span>
+        Good morning. I'm fully briefed on your portfolio — the ventures, the sequencing, the family team, the timeline to retirement, and what 2026 is supposed to accomplish as a foundation year.<br><br>
+        I know your priorities: <span class="tier-tag t1">Tier 1</span> Wayfinder and the AI Wellness Suite are the build-now window. <span class="tier-tag t2">Tier 2</span> Consultancy lines launch in 2027, with W&amp;M and WRAIR work as live prototypes now. <span class="tier-tag t3">Tier 3</span> Verdant Ways stays pre-incorporation until 2028.<br><br>
+        I also know your constraints — you're still active Army, bandwidth is real, and honest scoping matters more than aspirational task lists.<br><br>
+        What do you need from me today?
+      </div>
+    </div>
+  </div>
+
+  <div id="notes-panel" class="notes-panel">
+    <h3>Standing Notes &amp; Context</h3>
+    <textarea id="notes-text" placeholder="Add ongoing context here — decisions made, things to track, updates to your situation. This persists across sessions and gets included in every CoS conversation."></textarea>
+    <div style="display:flex;align-items:center;">
+      <button class="notes-save" onclick="saveNotes()">Save Notes</button>
+      <span class="save-confirm" id="save-confirm">✓ Saved</span>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <div class="input-row">
+      <textarea id="user-input" placeholder="Ask your Chief of Staff anything about your portfolio, priorities, or next steps…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button id="send-btn" onclick="sendMessage()">Send</button>
+    </div>
+    <div class="input-hint">Enter to send · Shift+Enter for new line</div>
+  </div>
+</main>
+
+<script>
+const PORTFOLIO_CONTEXT = `You are the Chief of Staff for Kirsten Smith, an active U.S. Army Colonel (COO-equivalent) at WRAIR (Walter Reed Army Institute of Research), approaching retirement in approximately 2028. You are a true AI employee — not a chatbot, not an assistant. You hold the full context of her venture portfolio and personal strategy and operate as a trusted senior advisor and operational coordinator.
+
+YOUR ROLE:
+- Portfolio oversight: Know the full venture strategy and track it
+- Priority management: Help her stay focused on what matters, given real bandwidth constraints
+- Strategic advising: Provide honest, direct assessment — no flattery, no false encouragement
+- Briefing and synthesis: Compress complexity into actionable clarity
+- Cross-venture thinking: Spot connections, risks, and sequencing issues across the portfolio
+
+VOICE: Direct, warm, precise. Like a trusted COO who knows the whole picture. Not sycophantic. Not corporate. Use clean prose, not bullet soup. Lead with the answer, then support it.
+
+FULL PORTFOLIO CONTEXT:
+
+TIER 1 — BUILD NOW (AI-native revenue engines):
+1. Wayfinder — AI life-purpose platform. Core family team: Kirsten (product vision + content architecture), Luka (CS major, technical lead — Connor's girlfriend), Megan (psychology/sociology — behavioral/developmental design), Connor and Liam (user research, peer network testing). Phil is supportive. Architecture: structured intake → AI synthesis → personalized portrait → evolving profile. Revenue model: freemium → $9–15/mo subscription → institutional licensing (high schools, W&M CMT, university advising, military transition, corporate outplacement). Connor pilot is a proven proof of concept. W&M CMT is the ideal first institutional pilot. 6–12 months to V1 with Luka building.
+2. AI Wellness Tools Suite — sleep, burnout, recovery tools with institutional licensing path. Shares architecture with Wayfinder. Will serve Verdant Ways Pillar 2 retreat center digitally.
+
+TIER 2 — BUILD IN PARALLEL:
+3. Consultancy Line 1 — Human-Centered AI Implementation. The WRAIR Data & AI Literacy Plan IS this methodology in live action. Every module = case study. The W&M Session C framework IS the first article and first consulting engagement.
+4. Consultancy Line 2 — Strategic AI Value Creation for Organizations. Answers "where" to implement AI; Line 1 answers "how." Together they're a complete offering. Needs methodology documentation.
+5. VT Executive Master of Natural Resources (XMNR) — January 2027 start, 11 weekends (5 on-campus DC metro, 6 virtual), 1-year hybrid. Strategic credential + 80+ sustainability network. Capstone targets publishable Verdant Ways work. Strengthens W&M, UVA, VT faculty positioning post-program. Apply late 2026 (rolling admissions). ~5–6 month gap between Mindvalley completion and XMNR start = strategic window.
+6. W&M Guest Faculty Engagement — Kelly Crace relationship (UVA CMAX also in play). Session C = Consultancy Line 1 live. Academic legitimacy + publishing platform + live methodology testing.
+
+TIER 3 — PARALLEL TRACK (pre-legal entity):
+7. Verdant Ways / Living Ground NoVA — Ecological nonprofit vision. Pre-incorporation; 501(c)(3) filing deferred to 2028 post-retirement. Community stewardship is ACTIVE now (IMA site leader, invasive plant removal, scout/neighbor workdays, website planning). Brand guide v3 exists. Do NOT frame as operational — it is pre-born but community-rooted.
+8. Guardian Eagle Yoga — Trauma-informed, active now as community practice.
+
+2026 IS A FOUNDATION YEAR — not a launch year:
+- Mindvalley AI Mastery course (120 hours, started April 2026, ~4 months) — AI fluency foundation. Building AI staff agents as class deliverable.
+- W&M Flourishing sessions — live consultancy prototype
+- WRAIR Data & AI Literacy Plan — live methodology + case study
+- Wayfinder V1 build with Luka — in progress
+- Writing: LinkedIn 1x/month minimum · HBR article seed ("Why AI transformation fails: the human system problem nobody is talking about")
+- No formal consulting launch in 2026 — that's a 2027 milestone
+
+KEY CONSTRAINTS:
+- Active Army officer until ~2028. Bandwidth is genuinely limited. Honest scoping always beats aspirational task lists.
+- Dual retirements provide base income — no immediate revenue pressure, building for competitive advantage and legacy.
+- The nonprofit (Verdant Ways) is the long-term mission. The AI ventures are the financial engine. Sequencing matters.
+
+PRIORITIZATION FRAMEWORK (four axes):
+1. Mission Alignment — reinforces Verdant Ways' human flourishing / ecological regeneration mission?
+2. AI Timing Advantage — closing window for competitive moat in next 12–24 months?
+3. Scale & Legacy Potential — recurring revenue that funds the mission without trading time for dollars?
+4. Bandwidth Cost — active Army + family + community = real limits. Weight toward high-leverage builds.
+
+BEHAVIORAL RULES:
+- Never flatter. Never paper over bandwidth constraints with aspirational lists.
+- Lead with the answer, then the reasoning.
+- When asked for a brief, be genuinely brief. When asked for depth, go deep.
+- If something is a real risk or gap, name it clearly.
+- Frame Verdant Ways as community-active but legally pre-born.`;
+
+// ── STORAGE KEYS ──
+const KEY_HISTORY = 'cos:history';
+const KEY_NOTES   = 'cos:notes';
+const MAX_HISTORY = 40; // messages kept in storage
+
+let history = [];
+let notesOpen = false;
+
+// ── INIT ──
+async function init() {
+  await loadHistory();
+  await loadNotes();
+}
+
+// ── HISTORY PERSISTENCE ──
+async function loadHistory() {
+  try {
+    const result = await window.storage.get(KEY_HISTORY);
+    const saved = result ? JSON.parse(result.value) : [];
+    history = saved;
+    updateMemStatus();
+
+    if (saved.length > 0) {
+      // Replay saved messages into UI
+      const conv = document.getElementById('conversation');
+      // Keep the welcome message if no history, else clear it
+      conv.innerHTML = '';
+      saved.forEach(m => renderMsg(m.role, m.content));
+      // Add a "session resumed" note
+      const resumeDiv = document.createElement('div');
+      resumeDiv.style.cssText = 'text-align:center;font-size:0.68rem;color:#aaa;letter-spacing:0.06em;padding:4px 0 8px;';
+      resumeDiv.textContent = `── Session resumed · ${saved.length} messages loaded ──`;
+      conv.appendChild(resumeDiv);
+    }
+  } catch {
+    // No history yet — keep welcome message
+    updateMemStatus();
+  }
+}
+
+async function saveHistory() {
+  const trimmed = history.slice(-MAX_HISTORY);
+  history = trimmed;
+  try {
+    await window.storage.set(KEY_HISTORY, JSON.stringify(trimmed));
+    updateMemStatus();
+  } catch (e) {
+    console.error('Storage save failed:', e);
+  }
+}
+
+function updateMemStatus() {
+  const el = document.getElementById('mem-status');
+  if (history.length === 0) {
+    el.textContent = 'No history';
+  } else {
+    const turns = Math.floor(history.length / 2);
+    el.textContent = `${turns} exchange${turns !== 1 ? 's' : ''} stored`;
+  }
+}
+
+// ── NOTES PERSISTENCE ──
+async function loadNotes() {
+  try {
+    const result = await window.storage.get(KEY_NOTES);
+    if (result) {
+      document.getElementById('notes-text').value = result.value;
+    }
+  } catch { /* no notes yet */ }
+}
+
+async function saveNotes() {
+  const text = document.getElementById('notes-text').value;
+  try {
+    await window.storage.set(KEY_NOTES, text);
+    const confirm = document.getElementById('save-confirm');
+    confirm.classList.add('show');
+    setTimeout(() => confirm.classList.remove('show'), 2000);
+  } catch (e) {
+    console.error('Notes save failed:', e);
+  }
+}
+
+function toggleNotes() {
+  notesOpen = !notesOpen;
+  document.getElementById('notes-panel').classList.toggle('open', notesOpen);
+}
+
+// ── CLEAR CONTROLS ──
+async function clearHistory() {
+  if (!confirm('Clear conversation history? (Notes will be kept.)')) return;
+  history = [];
+  try { await window.storage.delete(KEY_HISTORY); } catch {}
+  document.getElementById('conversation').innerHTML = '';
+  updateMemStatus();
+  showWelcome();
+}
+
+async function clearAll() {
+  if (!confirm('Reset everything — history and notes?')) return;
+  history = [];
+  try { await window.storage.delete(KEY_HISTORY); } catch {}
+  try { await window.storage.delete(KEY_NOTES); } catch {}
+  document.getElementById('conversation').innerHTML = '';
+  document.getElementById('notes-text').value = '';
+  updateMemStatus();
+  showWelcome();
+}
+
+function showWelcome() {
+  const conv = document.getElementById('conversation');
+  const div = document.createElement('div');
+  div.className = 'msg cos';
+  div.innerHTML = `
+    <div class="avatar cos">C</div>
+    <div class="bubble">
+      <span class="section-label">Chief of Staff · Ready</span>
+      Good morning. I'm fully briefed on your portfolio — the ventures, the sequencing, the family team, the timeline to retirement, and what 2026 is supposed to accomplish as a foundation year.<br><br>
+      I know your priorities: <span class="tier-tag t1">Tier 1</span> Wayfinder and the AI Wellness Suite are the build-now window. <span class="tier-tag t2">Tier 2</span> Consultancy lines launch in 2027, with W&amp;M and WRAIR work as live prototypes now. <span class="tier-tag t3">Tier 3</span> Verdant Ways stays pre-incorporation until 2028.<br><br>
+      I also know your constraints — you're still active Army, bandwidth is real, and honest scoping matters more than aspirational task lists.<br><br>
+      What do you need from me today?
+    </div>`;
+  conv.appendChild(div);
+}
+
+// ── BUILD SYSTEM PROMPT ──
+function buildSystemPrompt() {
+  const notes = document.getElementById('notes-text').value.trim();
+  let prompt = PORTFOLIO_CONTEXT;
+  if (notes) {
+    prompt += `\n\nSTANDING NOTES FROM KIRSTEN (updated by her — treat as current context):\n${notes}`;
+  }
+  prompt += `\n\nMEMORY NOTE: You have access to the conversation history below. Use it to maintain continuity — remember what was discussed, decisions made, and context established in prior exchanges.`;
+  return prompt;
+}
+
+// ── SEND MESSAGE ──
+async function sendMessage() {
+  const input = document.getElementById('user-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  renderMsg('user', text);
+  input.value = '';
+  autoResize(input);
+  history.push({ role: 'user', content: text });
+
+  const btn = document.getElementById('send-btn');
+  btn.disabled = true;
+  const thinkingEl = appendThinking();
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: buildSystemPrompt(),
+        messages: history
+      })
+    });
+
+    const data = await response.json();
+    thinkingEl.remove();
+
+    if (data.error) {
+      appendError('API error: ' + data.error.message);
+    } else {
+      const reply = data.content.find(b => b.type === 'text')?.text || '';
+      renderMsg('cos', reply);
+      history.push({ role: 'assistant', content: reply });
+      await saveHistory();
+    }
+  } catch (err) {
+    thinkingEl.remove();
+    appendError('Connection error. Check your network and try again.');
+  }
+
+  btn.disabled = false;
+  input.focus();
+}
+
+function sendQuick(text) {
+  document.getElementById('user-input').value = text;
+  sendMessage();
+}
+
+// ── RENDER ──
+function renderMsg(role, text) {
+  const conv = document.getElementById('conversation');
+  const div = document.createElement('div');
+  div.className = `msg ${role === 'user' ? 'user' : 'cos'}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = `avatar ${role === 'user' ? 'user-av' : 'cos'}`;
+  avatar.textContent = role === 'user' ? 'KS' : 'C';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = formatText(text);
+
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  conv.appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+function appendThinking() {
+  const conv = document.getElementById('conversation');
+  const div = document.createElement('div');
+  div.className = 'msg cos';
+  div.innerHTML = `
+    <div class="avatar cos">C</div>
+    <div class="thinking">
+      <div class="dots"><span></span><span></span><span></span></div>
+      Thinking…
+    </div>`;
+  conv.appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  return div;
+}
+
+function appendError(msg) {
+  const conv = document.getElementById('conversation');
+  const div = document.createElement('div');
+  div.className = 'error-bubble';
+  div.textContent = msg;
+  conv.appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+function formatText(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>')
+    .replace(/^- (.+)/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+}
+
+// Start
+init();
+</script>
+</body>
+</html>
